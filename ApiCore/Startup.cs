@@ -27,7 +27,7 @@ namespace ApiCore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSingleton<ICrypto, CryptoRSA>(o => new CryptoRSA(Properties.Resources.Keys));
+            services.AddSingleton<ICryptoRSA, CryptoRSA>(o => new CryptoRSA(Properties.Resources.Keys));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

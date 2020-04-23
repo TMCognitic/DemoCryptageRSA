@@ -10,17 +10,14 @@ using ToolBox.Cryptography;
 
 namespace Web.Infrastructure
 {
-    public class GetPublicKeyActionFilterAttribute : ActionFilterAttribute
+    public class GetPublicKeyAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            if (!(context.Controller is CryptoController cryptoController))
-                throw new InvalidOperationException("Your controller must inherit of 'CryptoController' Type");
-
             SecurityRepository securityRepository = (SecurityRepository)context.HttpContext.RequestServices.GetService(typeof(SecurityRepository));
+            ICryptoRSA cryptoRSA = (ICryptoRSA)context.HttpContext.RequestServices.GetService(typeof(ICryptoRSA));
             KeyInfo keyInfo = securityRepository.Get();
-
-            cryptoController.CryptoServices = new CryptoRSA(Convert.FromBase64String(keyInfo.PublicKey));            
+            cryptoRSA.ImportBinaryKeys(Convert.FromBase64String(keyInfo.PublicKey));            
         }
     }
 }

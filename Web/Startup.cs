@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Repository;
+using ToolBox.Cryptography;
 
 namespace Web
 {
@@ -25,6 +26,7 @@ namespace Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddScoped<ICryptoRSA, CryptoRSA>();
             services.AddSingleton<Uri>(p => new Uri("https://localhost:44393/api/"));
             services.AddSingleton<AuthRepository>();
             services.AddSingleton<SecurityRepository>();

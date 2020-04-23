@@ -13,9 +13,9 @@ namespace ApiCore.Controllers
     [ApiController]
     public class SecurityController : ControllerBase
     {
-        private ICrypto _cryptoService;
+        private ICryptoRSA _cryptoService;
 
-        public SecurityController(ICrypto cryptoService)
+        public SecurityController(ICryptoRSA cryptoService)
         {
             _cryptoService = cryptoService;
         }

@@ -10,13 +10,15 @@ using Web.Infrastructure;
 
 namespace Web.Controllers
 {
-    public class AuthController : CryptoController
+    public class AuthController : Controller
     {
         private readonly AuthRepository _authRepository;
+        private readonly ICryptoRSA _cryptoRSA;
 
-        public AuthController(AuthRepository authRepository)
+        public AuthController(AuthRepository authRepository, ICryptoRSA cryptoRSA)
         {
             _authRepository = authRepository;
+            _cryptoRSA = cryptoRSA;
         }
 
         public IActionResult Index()
@@ -30,9 +32,10 @@ namespace Web.Controllers
         }
 
         [HttpPost]
+        [GetPublicKey]
         public IActionResult Register(RegisterForm registerForm)
         {
-            registerForm.Passwd = Convert.ToBase64String(CryptoServices.Crypter(registerForm.Passwd));
+            registerForm.Passwd = Convert.ToBase64String(_cryptoRSA.Crypter(registerForm.Passwd));
 
             try
             {

@@ -4,12 +4,10 @@ using System.Text;
 
 namespace ToolBox.Cryptography
 {
-    public class CryptoRSA : ICrypto
+    public class CryptoRSA : ICryptoRSA
     {
         private RSACryptoServiceProvider _RSACSP;
-        private RSAParameters _RSAParameters;
         private UTF8Encoding _Converter;
-        private bool _OAEPPadding;
 
         public string XmlPublicKey
         {
@@ -31,32 +29,37 @@ namespace ToolBox.Cryptography
             get { return _RSACSP.ExportCspBlob(true); }
         }
 
-        public CryptoRSA(bool OAEPPadding = true, KeySizes KeySize = KeySizes.RSA2048)
+        public CryptoRSA() : this(KeySizes.RSA2048)
+        {
+
+        }
+
+        public CryptoRSA(KeySizes KeySize)
         {
             _RSACSP = new RSACryptoServiceProvider((int)KeySize);
-            _RSAParameters = _RSACSP.ExportParameters(!_RSACSP.PublicOnly);
-            _OAEPPadding = OAEPPadding;
             _Converter = new UTF8Encoding();
         }
 
-        public CryptoRSA(string XmlKeys, bool OAEPPadding = true, KeySizes KeySize = KeySizes.RSA2048) : this(OAEPPadding, KeySize)
+        public CryptoRSA(string XmlKeys)
         {
+            _RSACSP = new RSACryptoServiceProvider();
+            _Converter = new UTF8Encoding();
+
             if (XmlKeys != null)
             {
                 _RSACSP.FromXmlString(XmlKeys);
             }
-
-            _RSAParameters = _RSACSP.ExportParameters(!_RSACSP.PublicOnly);
         }
 
-        public CryptoRSA(byte[] BinaryKeys, bool OAEPPadding = true, KeySizes KeySize = KeySizes.RSA2048) : this(OAEPPadding, KeySize)
+        public CryptoRSA(byte[] BinaryKeys)
         {
+            _RSACSP = new RSACryptoServiceProvider();
+            _Converter = new UTF8Encoding();
+
             if (BinaryKeys != null)
             {
                 _RSACSP.ImportCspBlob(BinaryKeys);
             }
-
-            _RSAParameters = _RSACSP.ExportParameters(!_RSACSP.PublicOnly);
         }
 
         public byte[] Crypter(string ACrypter)
@@ -65,7 +68,7 @@ namespace ToolBox.Cryptography
                 throw new InvalidOperationException(string.Format("Chaine trop longue!!! (Taille Maximale : {0})", ((_RSACSP.KeySize / 8) - 42) / 2));
 
             byte[] ACrypterEnByte = _Converter.GetBytes(ACrypter);
-            return _RSACSP.Encrypt(ACrypterEnByte, _OAEPPadding);
+            return _RSACSP.Encrypt(ACrypterEnByte, true);
         }
 
         public string Decrypter(byte[] ADecrypter)
@@ -75,8 +78,18 @@ namespace ToolBox.Cryptography
                 throw new InvalidOperationException("Pour décrypter il vous faut la clé privée!!");
             }
 
-            byte[] Decrypte = _RSACSP.Decrypt(ADecrypter, _OAEPPadding);
+            byte[] Decrypte = _RSACSP.Decrypt(ADecrypter, true);
             return _Converter.GetString(Decrypte);
+        }
+
+        public void ImportBinaryKeys(byte[] keys)
+        {
+            _RSACSP.ImportCspBlob(keys);
+        }
+
+        public void ImportXmlKeys(string xml)
+        {
+            _RSACSP.FromXmlString(xml);
         }
     }
 }
