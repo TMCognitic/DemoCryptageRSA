@@ -15,6 +15,7 @@ namespace Repository
         {
             HttpClientHandler handler = new HttpClientHandler()
             {
+                //obligatoire si on lance l'api en selfhost (console) sinon .Default
                 SslProtocols = SslProtocols.Tls12
             };
 

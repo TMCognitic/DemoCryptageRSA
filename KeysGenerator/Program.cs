@@ -8,7 +8,7 @@ namespace KeysGenerator
     {
         static void Main(string[] args)
         {
-            ICrypto crypto = new CryptoRSA(KeySize:KeySizes.RSA2048);
+            ICryptoRSA crypto = new CryptoRSA(KeySize:KeySizes.RSA2048);
 
             File.WriteAllBytes("Keys.bin", crypto.BinaryBothKeys);
         }
