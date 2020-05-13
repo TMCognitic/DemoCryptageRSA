@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,7 +28,7 @@ namespace Web
         {
             services.AddControllersWithViews();
             services.AddScoped<ICryptoRSA, CryptoRSA>();
-            services.AddSingleton<Uri>(p => new Uri("https://localhost:44393/api/"));
+            services.AddSingleton<Uri>(p => new Uri("https://localhost:5001/api/"));
             services.AddSingleton<AuthRepository>();
             services.AddSingleton<SecurityRepository>();
         }

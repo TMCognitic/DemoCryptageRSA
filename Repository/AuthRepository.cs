@@ -15,7 +15,7 @@ namespace Repository
         {
             HttpClientHandler handler = new HttpClientHandler()
             {
-                SslProtocols = SslProtocols.Default
+                SslProtocols = SslProtocols.Tls12
             };
 
             handler.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) => true;

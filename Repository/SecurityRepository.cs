@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Authentication;
@@ -18,11 +19,10 @@ namespace Repository
         {
             HttpClientHandler handler = new HttpClientHandler()
             {
-                SslProtocols = SslProtocols.Default
+                SslProtocols = SslProtocols.Tls12
             };
 
             handler.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) => true;
-
             _httpClient = new HttpClient(handler);
             _httpClient.BaseAddress = baseAddress;
             _httpClient.DefaultRequestHeaders.Accept.Clear();
